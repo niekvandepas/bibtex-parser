@@ -39,7 +39,6 @@ executable bibtex-to-sqlite
     -- other-extensions:
     build-depends:
       base ^>=4.16.1.0
-      , sqlite-simple
       , parsec
       , containers
       , text

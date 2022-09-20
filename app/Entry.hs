@@ -5,12 +5,6 @@ import Data.Map (Map, lookup)
 import Field (Field (..))
 import Prelude hiding (lookup)
 import Data.Maybe (fromMaybe)
-import           Database.SQLite.Simple
-import           Database.SQLite.Simple.FromRow
-import           Database.SQLite.Simple.FromField
-import           Database.SQLite.Simple.ToField
-import           Database.SQLite.Simple.Internal
-import           Database.SQLite.Simple.Ok
 
 type Key = String
 
@@ -47,46 +41,6 @@ data Entry = Entry
     year :: Maybe String
   }
   deriving (Eq, Read, Show)
-
-instance FromRow Entry where
-  fromRow =
-    Entry <$>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field <*>
-    field
-
-instance ToRow Entry where
-  toRow
-    (Entry pBibtexType pKey pAbstract pAddress pAnnote pAuthor pBooktitle pChapter pCrossref pDoi pEdition pEditor pHowpublished pInstitution pIssn pIssue pJournal pKeywords pMonth pNote pNumber pOrganization pPages pPublisher pSchool pSeries pTitle pReporttype pVolume pYear)
-    -- = toRow (pBibtexType, pKey, pAbstract, pAddress, pAnnote, pAuthor, pBooktitle, pChapter, pCrossref, pDoi, pEdition, pEditor, pHowpublished, pInstitution, pIssn, pIssue, pJournal, pKeywords, pMonth, pNote, pNumber, pOrganization, pPages, pPublisher, pSchool, pSeries, pTitle, pReporttype, pVolume, pYear)
-    = undefined
 
 fromFields :: Map Field.Field String -> BibtexType -> Key -> Entry
 fromFields fields bibtexType key =
