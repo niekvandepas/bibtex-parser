@@ -11,7 +11,6 @@ import Data.Maybe (catMaybes)
 parseBibtex :: String -> Either ParseError [Entry]
 parseBibtex input = parse parseBibtexFile "bibtex" input
 
--- TODO the result of this parser is `[Nothing]`
 parseBibtexFile :: Parser [Entry]
 parseBibtexFile = many parseEntry
 
