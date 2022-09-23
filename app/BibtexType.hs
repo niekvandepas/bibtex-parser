@@ -2,7 +2,6 @@
 module BibtexType where
 import Data.Char (toLower)
 import Data.List (isPrefixOf)
-import Data.Text (pack)
 
 data BibtexType
   = Article

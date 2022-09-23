@@ -18,7 +18,6 @@ data Field
   | ISSN
   | Issue
   | Journal
-  | Key
   | Keywords
   | Month
   | Note
@@ -51,7 +50,6 @@ instance Read Field where
     | "issn" `isPrefixOf` s' = [(ISSN, drop (length "issn") s)]
     | "issue" `isPrefixOf` s' = [(Issue, drop (length "issue") s)]
     | "journal" `isPrefixOf` s' = [(Journal, drop (length "journal") s)]
-    | "key" `isPrefixOf` s'= [(Key, drop (length "key") s)]
     | "keywords" `isPrefixOf` s'= [(Keywords, drop (length "keywords") s)]
     | "month" `isPrefixOf` s' = [(Month, drop (length "month") s)]
     | "note" `isPrefixOf` s'= [(Note, drop (length "note") s)]

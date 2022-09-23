@@ -7,6 +7,7 @@ import Prelude hiding (lookup)
 import Data.Maybe (fromMaybe)
 
 type Key = String
+type Author = String
 
 data Entry = Entry
   { bibtexType :: BibtexType,
@@ -14,7 +15,7 @@ data Entry = Entry
     abstract :: Maybe String,
     address :: Maybe String,
     annote :: Maybe String,
-    author :: Maybe String,
+    author :: [Author],
     booktitle :: Maybe String,
     chapter :: Maybe String,
     crossref :: Maybe String,
@@ -42,13 +43,12 @@ data Entry = Entry
   }
   deriving (Eq, Read, Show)
 
-fromFields :: Map Field.Field String -> BibtexType -> Key -> Entry
-fromFields fields bibtexType key =
+fromFields :: Map Field.Field String -> [Author] -> BibtexType -> Key -> Entry
+fromFields fields author bibtexType key =
   let
     abstract = lookup Abstract fields
     address = lookup Address fields
     annote = lookup Annote fields
-    author = lookup Author fields
     booktitle = lookup Booktitle fields
     chapter = lookup Chapter fields
     crossref = lookup Crossref fields
