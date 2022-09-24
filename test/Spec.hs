@@ -1,6 +1,6 @@
 import Test.Tasty (defaultMain, testGroup, TestTree)
 import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
-import Parse (parseBibtex)
+import Parse.Bibtex (parseBibtex)
 import Entry
 import BibtexType (BibtexType(..))
 

@@ -5,7 +5,7 @@ import Data.Char (toUpper, toLower)
 import Data.Map (fromList)
 import Data.List (isPrefixOf)
 import Data.Map.Lazy (Map)
-import Parse (parseBibtex)
+import Parse.Bibtex (parseBibtex)
 
 main :: IO ()
 main = do

@@ -1,5 +1,5 @@
 {-# LANGUAGE RecordWildCards #-}
-module Parse (parseBibtex) where
+module Parse.Bibtex (parseBibtex) where
 import Text.Parsec (spaces, parserTrace)
 import Text.ParserCombinators.Parsec
 import Entry (Entry (..), fromFields)

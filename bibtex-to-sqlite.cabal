@@ -36,7 +36,7 @@ library
     BibtexType
     , Entry
     , Field
-    , Parse
+    , Parse.Bibtex
   other-modules:
     Persistence
   hs-source-dirs:   app
@@ -50,7 +50,7 @@ executable bibtex-to-sqlite
       BibtexType
       , Entry
       , Field
-      , Parse
+      , Parse.Bibtex
       , Persistence
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
