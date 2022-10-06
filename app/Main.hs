@@ -9,11 +9,9 @@ import Parse.Bibtex (parseBibtex)
 
 main :: IO ()
 main = do
-  putStr "\n" -- Seperator between compiler and program output
+  putStr "\n\n" -- Seperator between compiler and program output
   s <- readFile "testfile_no_keywords.bib"
-  case parseBibtex $ preProcess s of
-    Left err -> print err
-    Right val -> print val
+  (print . parseBibtex . preProcess) s
 
 -- | Strips consecutive newlines
 preProcess :: String -> String

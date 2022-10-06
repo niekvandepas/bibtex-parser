@@ -3,6 +3,7 @@ import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 import Parse.Bibtex (parseBibtex)
 import Entry
 import BibtexType (BibtexType(..))
+import Debug.Trace (trace)
 
 main :: IO ()
 main = defaultMain unitTests
@@ -35,6 +36,7 @@ parsesSingleEntry = testCase "Parses a single entry" $ assertEqual "" expected a
 \}"
     actual = parseBibtex entry
     expected = Right $  [ entry1 ]
+
 
 -- parsesMultipleEntries :: TestTree
 -- parsesMultipleEntries = testCase "Parses a single entry" $ assertEqual "" expected actual

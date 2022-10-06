@@ -1,7 +1,5 @@
 {-# LANGUAGE RecordWildCards #-}
 module Parse.Bibtex (parseBibtex) where
-import Text.Parsec (spaces, parserTrace)
-import Text.ParserCombinators.Parsec
 import Entry (Entry (..), fromFields)
 import Field (Field (Author))
 import BibtexType (BibtexType)
@@ -9,9 +7,22 @@ import Control.Monad (liftM)
 import Data.Map (fromList, Map, lookup)
 import Data.Maybe (catMaybes)
 import Data.List.Split (splitOn)
+import Text.Megaparsec (Parsec, ParseError, ParseErrorBundle, parse, many, between, endBy, noneOf, satisfy, parseTest, some, manyTill, choice, (<?>), anySingleBut)
+import Text.Megaparsec.Char (char, string, space, alphaNumChar, printChar)
+import Text.ParserCombinators.ReadP (many1)
+import Text.Megaparsec.Char.Lexer (charLiteral)
+import Debug.Trace (trace)
 
-parseBibtex :: String -> Either ParseError [Entry]
+type Parser = Parsec () String
+
+parseBibtex :: String -> Either (ParseErrorBundle String ()) [Entry]
 parseBibtex input = parse parseBibtexFile "bibtex" input
+-- parseBibtex _ = trace (show $ parse p "test" "{hello world}") $ Right []
+--   where
+--     p :: Parser String
+--     p = do
+--      char '{'
+--      some (anySingleBut '}')
 
 parseBibtexFile :: Parser [Entry]
 parseBibtexFile = many parseEntry
@@ -27,24 +38,53 @@ parseEntry = do
 
 parseFields :: Parser (String, Map Field String)
 parseFields = between (char '{') (char '}') $ do
-    key <- parseKey
-    fields <- endBy parseField (string ",\n")
-    return (key, fromList fields)
-      where
-        parseField :: Parser (Field, String)
-        parseField = do
-          field <- spaces >> readField
-          value <- spaces >> char '=' >> spaces >> between (char '{') (char '}') (many1 $ noneOf "}")
-          return (field, value)
+  key <- parseKey <?> "valid key"
+  char '\n'
+  fields <- trace (key) endBy parseField (string "},\n")
+  return (key, fromList fields)
 
-readField :: Parser Field
-readField = liftM read $ many1 alphaNum
+parseField :: Parser (Field, String)
+parseField = do
+  field <- space >> choice validFields <?> "valid field"
+  value <- space >> char '=' >> space >> char '{' >> some (anySingleBut '}') <?> ("value for field " ++ field)
+  return (read field, value)
+  where
+    validFields =
+      [ string "abstract"
+      , string "annote"
+      , string "address"
+      , string "author"
+      , string "booktitle"
+      , string "chapter"
+      , string "crossref"
+      , string "doi"
+      , string "edition"
+      , string "editor"
+      , string "howpublished"
+      , string "institution"
+      , string "issn"
+      , string "issue"
+      , string "journal"
+      , string "keywords"
+      , string "month"
+      , string "note"
+      , string "number"
+      , string "organization"
+      , string "pages"
+      , string "publisher"
+      , string "school"
+      , string "series"
+      , string "title"
+      , string "type"
+      , string "volume"
+      , string "year"
+      ]
 
 parseKey :: Parser String
-parseKey = manyTill anyChar $ char ','
+parseKey = (manyTill charLiteral $ char ',') <?> "key"
 
 parseBibtexType :: Parser BibtexType
-parseBibtexType = liftM read $ many1 alphaNum
+parseBibtexType = (liftM read $ some alphaNumChar) <?> "type"
 
 splitAuthors :: Maybe String -> [String]
 splitAuthors Nothing = []
