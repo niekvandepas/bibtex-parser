@@ -17,12 +17,6 @@ type Parser = Parsec () String
 
 parseBibtex :: String -> Either (ParseErrorBundle String ()) [Entry]
 parseBibtex input = parse parseBibtexFile "bibtex" input
--- parseBibtex _ = trace (show $ parse p "test" "{hello world}") $ Right []
---   where
---     p :: Parser String
---     p = do
---      char '{'
---      some (anySingleBut '}')
 
 parseBibtexFile :: Parser [Entry]
 parseBibtexFile = many parseEntry
