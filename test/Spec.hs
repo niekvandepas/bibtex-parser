@@ -3,7 +3,6 @@ import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 import Parse.Bibtex (parseBibtex)
 import Entry
 import BibtexType (BibtexType(..))
-import Debug.Trace (trace)
 
 main :: IO ()
 main = defaultMain unitTests

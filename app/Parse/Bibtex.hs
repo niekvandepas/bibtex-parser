@@ -11,7 +11,6 @@ import Text.Megaparsec (Parsec, ParseError, ParseErrorBundle, parse, many, betwe
 import Text.Megaparsec.Char (char, string, space, alphaNumChar, printChar)
 import Text.ParserCombinators.ReadP (many1)
 import Text.Megaparsec.Char.Lexer (charLiteral)
-import Debug.Trace (trace)
 
 type Parser = Parsec () String
 
@@ -34,7 +33,7 @@ parseFields :: Parser (String, Map Field String)
 parseFields = between (char '{') (char '}') $ do
   key <- parseKey <?> "valid key"
   char '\n'
-  fields <- trace (key) endBy parseField (string "},\n")
+  fields <- endBy parseField (string "},\n")
   return (key, fromList fields)
 
 parseField :: Parser (Field, String)
