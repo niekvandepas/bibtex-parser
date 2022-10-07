@@ -6,12 +6,10 @@ import Data.List.Split (splitOn, splitWhen)
 import Text.Read (readMaybe)
 import Data.Char (toLower, isSpace)
 import Data.Map (Map, fromList)
-import Debug.Trace (trace)
 
 parseSearch :: String -> Map Field (Maybe String)
 parseSearch s = fromList $ map readParsed (keysValues s)
   where
-    -- ["kw = hello world, something else", "author = someone"]
     params :: [String]
     params = splitOn ";" s
     keysValues s = map (splitAtPredicate (== '=')) $ params
