@@ -1,4 +1,4 @@
-# Revision history for bibtex-to-sqlite
+# Revision history for bibtex-parser
 
 ## 0.1.0.0 -- YYYY-mm-dd
 
