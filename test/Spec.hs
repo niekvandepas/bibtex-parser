@@ -1,8 +1,11 @@
 import Test.Tasty (defaultMain, testGroup, TestTree)
 import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 import Parse.Bibtex (parseBibtex)
+import Parse.Search (parseSearch)
 import Entry
 import BibtexType (BibtexType(..))
+import Field (Field (..))
+import Data.Map (Map, fromList)
 
 main :: IO ()
 main = defaultMain unitTests
@@ -15,6 +18,8 @@ unitTests =
 tests =
     [ parsesSingleEntry
     -- , parsesMultipleEntries
+    , parsesSearchQuery
+    , parsesComplexSearchQuery
     ]
 
 parsesSingleEntry :: TestTree
@@ -36,12 +41,23 @@ parsesSingleEntry = testCase "Parses a single entry" $ assertEqual "" expected a
     actual = parseBibtex entry
     expected = Right $  [ entry1 ]
 
-
 -- parsesMultipleEntries :: TestTree
 -- parsesMultipleEntries = testCase "Parses a single entry" $ assertEqual "" expected actual
 --   where
 --     actual = _
 --     expected = _
+
+parsesSearchQuery = testCase "Parses a simple search query" $ assertEqual "" expected actual
+  where
+    expected :: Map Field (Maybe String)
+    expected = fromList [(Author, Just "someone")]
+    actual = parseSearch "author = someone"
+
+parsesComplexSearchQuery = testCase "Parses a complex search query" $ assertEqual "" expected actual
+  where
+    expected :: Map Field (Maybe String)
+    expected = fromList [(Author, Just "someone"), (Title, Just "Hello world!"), (Year, Just "2022")]
+    actual = parseSearch "author = someone; title = Hello world!; year=2022"
 
 entry1 = Entry
           { bibtexType = Article

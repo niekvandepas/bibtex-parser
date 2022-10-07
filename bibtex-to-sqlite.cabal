@@ -37,6 +37,7 @@ library
     , Entry
     , Field
     , Parse.Bibtex
+    , Parse.Search
   other-modules:
     Persistence
   hs-source-dirs:   app
@@ -51,6 +52,7 @@ executable bibtex-to-sqlite
       , Entry
       , Field
       , Parse.Bibtex
+      , Parse.Search
       , Persistence
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
@@ -77,4 +79,5 @@ test-suite bibtex-to-sqlite-test
     , bibtex-to-sqlite
     , tasty
     , tasty-hunit
+    , containers
   default-language: Haskell2010
