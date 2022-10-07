@@ -1,7 +1,7 @@
 import Test.Tasty (defaultMain, testGroup, TestTree)
 import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 import Parse.Bibtex (parseBibtex)
-import Parse.Search (parseSearch)
+import Parse.Search.Internal (parseSearch)
 import Entry
 import BibtexType (BibtexType(..))
 import Field (Field (..))

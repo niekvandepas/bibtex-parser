@@ -38,6 +38,7 @@ library
     , Field
     , Parse.Bibtex
     , Parse.Search
+    , Parse.Search.Internal
   other-modules:
     Persistence
   hs-source-dirs:   app
@@ -53,6 +54,7 @@ executable bibtex-parser
       , Field
       , Parse.Bibtex
       , Parse.Search
+      , Parse.Search.Internal
       , Persistence
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
