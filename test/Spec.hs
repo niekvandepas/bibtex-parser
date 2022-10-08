@@ -21,6 +21,7 @@ tests =
     -- , parsesMultipleEntries
     , parsesSearchQuery
     , parsesComplexSearchQuery
+    , parsesShorthandSearchQuery
     , performsSearch
     , performsSearchWithNoResult
     ]
@@ -61,6 +62,12 @@ parsesComplexSearchQuery = testCase "Parses a complex search query" $ assertEqua
     expected :: Map Field (Maybe String)
     expected = fromList [(Author, Just "someone"), (Title, Just "Hello world!"), (Year, Just "2022")]
     actual = parseSearch "author = someone; title = Hello world!; year=2022"
+
+parsesShorthandSearchQuery = testCase "Parses a complex search query" $ assertEqual "" expected actual
+  where
+    expected :: Map Field (Maybe String)
+    expected = fromList [(Author, Just "someone"), (Title, Just "Hello world!"), (Year, Just "2022")]
+    actual = parseSearch "au = someone; t = Hello world!; y=2022"
 
 performsSearch = testCase "Performs a simple search query" $ assertEqual "" expected actual
   where
