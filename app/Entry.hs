@@ -1,5 +1,5 @@
 {-# LANGUAGE RecordWildCards #-}
-module Entry (Entry(..), fromFields) where
+module Entry (Entry(..), fromFields, empty) where
 import BibtexType (BibtexType)
 import Data.Map (Map, lookup)
 import Field (Field (..))
@@ -74,3 +74,37 @@ fromFields fields author bibtexType key =
     volume = lookup Volume fields
     year = lookup Year fields
   in Entry {key = key, bibtexType = bibtexType, ..} -- TODO this can be simplified to Entry {..}
+
+empty :: Key -> BibtexType -> Entry
+empty k bt = Entry
+  { bibtexType = bt
+  , key = k
+  , abstract = Nothing
+  , address = Nothing
+  , annote = Nothing
+  , author = []
+  , booktitle = Nothing
+  , chapter = Nothing
+  , crossref = Nothing
+  , doi = Nothing
+  , edition = Nothing
+  , editor = Nothing
+  , howpublished = Nothing
+  , institution = Nothing
+  , issn = Nothing
+  , issue = Nothing
+  , journal = Nothing
+  , keywords = Nothing
+  , month = Nothing
+  , note = Nothing
+  , number = Nothing
+  , organization = Nothing
+  , pages = Nothing
+  , publisher = Nothing
+  , school = Nothing
+  , series = Nothing
+  , title = Nothing
+  , reporttype = Nothing
+  , volume = Nothing
+  , year = Nothing
+  }
