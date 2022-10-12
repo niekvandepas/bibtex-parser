@@ -9,6 +9,8 @@ import Data.Maybe (fromMaybe)
 type Key = String
 type Author = String
 
+-- TODO it may be better to model `Entry` as follows:
+-- data Entry = Article { name :: String, age :: Int } | Book { title :: String, publisher :: String} | ...etc.
 data Entry = Entry
   { bibtexType :: BibtexType,
     key :: Key,

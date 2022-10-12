@@ -7,6 +7,7 @@ import BibtexType (BibtexType(..))
 import Field (Field (..))
 import Data.Map (Map, fromList)
 import Entry (empty)
+import UI (ui)
 
 main :: IO ()
 main = defaultMain unitTests
@@ -103,6 +104,40 @@ entry1 = Entry
           , howpublished = Nothing
           , institution = Nothing
           , keywords = Nothing
+          , month = Nothing
+          , note = Nothing
+          , number = Nothing
+          , organization = Nothing
+          , school = Nothing
+          , series = Nothing
+          , reporttype = Nothing
+          }
+
+entry2 :: Entry
+entry2 = Entry
+          { bibtexType = Techreport
+          , key = "Verkuyten2006"
+          , abstract = Just "The present research was conducted in the Netherlands and used an experimental design to examine the endorsement of minority rights among Turkish and Kurdish participants in two framed, national contexts: the Netherlands and Turkey. In the Dutch context, each group is a minority, whereas in the Turkish context the Kurds are an oppressed national minority and the Turks are the national majority. The results showed that the Turks were less in favor of minority rights in the Turkish context than in the Dutch context, whereas the Kurds were more in favor of minority rights in the Turkish than in the Dutch context. In addition, the endorsement of minority rights was related to beliefs about majority rule, state unity, and ingroup identification, as well as to cultural diversity and perceived pervasive discrimination. The associations with the former three measures differed between the two groups and the two national contexts, whereas the latter two measures had main effects on the endorsement of minority rights."
+          , author = ["Maykel Verkuyten",  "Ali Aslan Yildiz"]
+          , doi = Just "10.1080/01419870.2021.1887503"
+          , issn = Just "14664356"
+          , issue = Just "16"
+          , journal = Just "Ethnic and Racial Studies"
+          , pages = Just "106-125"
+          , publisher = Just "Routledge"
+          , title = Just "The Endorsement of Minority Rights: The Role of Group Position, National Context, and Ideological Beliefs"
+          , volume = Just "44"
+          , year = Just "2006"
+          , address = Nothing
+          , annote = Nothing
+          , booktitle = Nothing
+          , chapter = Nothing
+          , crossref = Nothing
+          , edition = Nothing
+          , editor = Nothing
+          , howpublished = Nothing
+          , institution = Nothing
+          , keywords = Just "identification,ideological beliefs,minority rights"
           , month = Nothing
           , note = Nothing
           , number = Nothing

@@ -6,12 +6,15 @@ import Data.Map (fromList)
 import Data.List (isPrefixOf)
 import Data.Map.Lazy (Map)
 import Parse.Bibtex (parseBibtex)
+import UI (ui)
+import Brick (simpleMain)
 
 main :: IO ()
 main = do
-  putStr "\n\n" -- Seperator between compiler and program output
   s <- readFile "testfile.bib"
-  (print . parseBibtex . preProcess) s
+  case (parseBibtex . preProcess) s of
+    Left p -> print p
+    Right entries -> simpleMain $ ui entries
 
 -- | Strips consecutive newlines
 preProcess :: String -> String
