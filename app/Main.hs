@@ -19,7 +19,3 @@ main = do
 -- | Strips consecutive newlines
 preProcess :: String -> String
 preProcess = unlines . filter (/= "") . lines
-
-capitalize :: String -> String
-capitalize (x:xs) = toUpper x : (map toLower xs)
-capitalize [] = []
