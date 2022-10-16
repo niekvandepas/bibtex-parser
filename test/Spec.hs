@@ -8,6 +8,7 @@ import Field (Field (..))
 import Data.Map (Map, fromList)
 import Entry (empty)
 import UI (ui)
+import Data.Either (isLeft)
 
 main :: IO ()
 main = defaultMain unitTests
@@ -20,6 +21,7 @@ unitTests =
 tests =
     [ parsesSingleEntry
     -- , parsesMultipleEntries
+    , failsOnInvalidBibtexType
     , parsesSearchQuery
     , parsesComplexSearchQuery
     , parsesShorthandSearchQuery
@@ -51,6 +53,24 @@ parsesSingleEntry = testCase "Parses a single entry" $ assertEqual "" expected a
 --   where
 --     actual = _
 --     expected = _
+
+failsOnInvalidBibtexType = testCase "Refuses to parse an entry with an invalid bibtex type" $ assertBool "" condition
+  where
+    entry = "@orticle{Veerman2021,\n\
+\  abstract = {Ethnic identity is central to many contemporary discussions of belonging and assimilation of migrant-origin youth. Studies typically focus on a single minority identity. Identity theory implies, however, that individuals may hold multiple ethnic identities, or none, and these may find expression to a greater or less extent depending on context. Using a nationally representative, longitudinal study of Dutch teenagers, we investigate the role of classroom ethnic composition in shaping multiple ethnic identity expression. Framing identity choices as a relational process, we show that the number of ethnic identities that children with a migrant-origin background choose is greater for those students who are exposed to a more ethnically diverse context, while less diverse classrooms foster ethnic identification with no or fewer minority groups. Classification of migrant-origin students with a single (minority) ethnicity may thus be an oversimplification of ethnic identity, even for those from a single country of origin.},\n\
+\  author = {Gert Jan Veerman and Lucinda Platt},\n\
+\  doi = {10.1080/01419870.2021.1887503},\n\
+\  issn = {14664356},\n\
+\  issue = {16},\n\
+\  journal = {Ethnic and Racial Studies},\n\
+\  pages = {106-125},\n\
+\  publisher = {Routledge},\n\
+\  title = {School composition and multiple ethnic identities of migrant-origin adolescents in the Netherlands},\n\
+\  volume = {44},\n\
+\  year = {2021},\n\
+\}"
+    condition = isLeft $ parseBibtex entry
+
 
 parsesSearchQuery = testCase "Parses a simple search query" $ assertEqual "" expected actual
   where

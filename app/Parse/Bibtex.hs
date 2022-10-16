@@ -77,7 +77,25 @@ parseKey :: Parser String
 parseKey = (manyTill charLiteral $ char ',') <?> "key"
 
 parseBibtexType :: Parser BibtexType
-parseBibtexType = (liftM read $ some alphaNumChar) <?> "type"
+parseBibtexType =
+  (liftM read $ choice validBibtexTypes) <?> "valid type"
+  where
+    validBibtexTypes =
+      [ string "article"
+      , string "book"
+      , string "booklet"
+      , string "conference"
+      , string "inbook"
+      , string "incollection"
+      , string "inproceedings"
+      , string "manual"
+      , string "mastersthesis"
+      , string "misc"
+      , string "phdthesis"
+      , string "proceedings"
+      , string "techreport"
+      , string "unpublished"
+      ]
 
 splitAuthors :: Maybe String -> [String]
 splitAuthors Nothing = []
