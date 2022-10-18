@@ -23,6 +23,7 @@ data Entry = Entry
     crossref :: Maybe String,
     doi :: Maybe String,
     edition :: Maybe String,
+    -- TODO model `editor` as [Author]
     editor :: Maybe String,
     howpublished :: Maybe String,
     institution :: Maybe String,

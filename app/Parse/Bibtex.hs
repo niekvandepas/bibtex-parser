@@ -21,6 +21,7 @@ parseBibtex input = parse parseBibtexFile "bibtex" input
 parseBibtexFile :: Parser [Entry]
 parseBibtexFile = many parseEntry
 
+-- TODO on entry parse error, skip verbosely
 parseEntry :: Parser (Entry)
 parseEntry = do
   many newline
@@ -28,6 +29,7 @@ parseEntry = do
   bibtexType <- parseBibtexType
   (key, fields) <- parseFields
   case Data.Map.lookup Author fields of
+    -- TODO should this fail? An empty list may be better, possibly with warning
     Nothing -> fail "No 'author' field"
     Just authors -> return $ fromFields fields (splitOn " and " authors) bibtexType key
 
