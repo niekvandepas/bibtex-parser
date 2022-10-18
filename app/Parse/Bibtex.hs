@@ -7,14 +7,15 @@ import Control.Monad (liftM)
 import Data.Map (fromList, Map, lookup)
 import Data.Maybe (catMaybes)
 import Data.List.Split (splitOn)
-import Text.Megaparsec (Parsec, ParseError, ParseErrorBundle, parse, many, between, endBy, noneOf, satisfy, parseTest, some, manyTill, choice, (<?>), anySingleBut)
-import Text.Megaparsec.Char (char, string, space, alphaNumChar, printChar)
+import Text.Megaparsec (Parsec, ParseError, ParseErrorBundle, parse, many, between, endBy, noneOf, satisfy, parseTest, some, manyTill, choice, (<?>), anySingleBut, sepBy, MonadParsec (eof))
+import Text.Megaparsec.Char (char, string, space, alphaNumChar, printChar, newline)
 import Text.ParserCombinators.ReadP (many1)
 import Text.Megaparsec.Char.Lexer (charLiteral)
+import Data.Void (Void)
 
-type Parser = Parsec () String
+type Parser = Parsec Void String
 
-parseBibtex :: String -> Either (ParseErrorBundle String ()) [Entry]
+parseBibtex :: String -> Either (ParseErrorBundle String Void) [Entry]
 parseBibtex input = parse parseBibtexFile "bibtex" input
 
 parseBibtexFile :: Parser [Entry]
@@ -22,6 +23,7 @@ parseBibtexFile = many parseEntry
 
 parseEntry :: Parser (Entry)
 parseEntry = do
+  many newline
   char '@'
   bibtexType <- parseBibtexType
   (key, fields) <- parseFields
@@ -33,13 +35,15 @@ parseFields :: Parser (String, Map Field String)
 parseFields = between (char '{') (char '}') $ do
   key <- parseKey <?> "valid key"
   char '\n'
-  fields <- endBy parseField (string "},\n")
+  fields <- sepBy (parseField) (string ",\n")
+  space
   return (key, fromList fields)
 
 parseField :: Parser (Field, String)
 parseField = do
   field <- space >> choice validFields <?> "valid field"
   value <- space >> char '=' >> space >> char '{' >> some (anySingleBut '}') <?> ("value for field " ++ field)
+  char '}'
   return (read field, value)
   where
     validFields =

@@ -20,7 +20,7 @@ unitTests =
 
 tests =
     [ parsesSingleEntry
-    -- , parsesMultipleEntries
+    , parsesMultipleEntries
     , failsOnInvalidBibtexType
     , parsesSearchQuery
     , parsesComplexSearchQuery
@@ -40,20 +40,45 @@ parsesSingleEntry = testCase "Parses a single entry" $ assertEqual "" expected a
 \  issn = {14664356},\n\
 \  issue = {16},\n\
 \  journal = {Ethnic and Racial Studies},\n\
+\  keywords = {Ethnic identity,adolescents,classroom composition,ethnic diversity,migrant-origin background,multiple identity},\n\
 \  pages = {106-125},\n\
 \  publisher = {Routledge},\n\
 \  title = {School composition and multiple ethnic identities of migrant-origin adolescents in the Netherlands},\n\
 \  volume = {44},\n\
-\  year = {2021},\n\
+\  year = {2021}\n\
 \}"
     actual = parseBibtex entry
     expected = Right $  [ entry1 ]
 
--- parsesMultipleEntries :: TestTree
--- parsesMultipleEntries = testCase "Parses a single entry" $ assertEqual "" expected actual
---   where
---     actual = _
---     expected = _
+parsesMultipleEntries :: TestTree
+parsesMultipleEntries = testCase "Parses multiple entries" $ assertEqual "" expected actual
+  where
+    actual = parseBibtex bibtex
+    expected = Right [entry1, entry2]
+    bibtex =
+      "@article{Veerman2021,\n\
+      \   abstract = {Ethnic identity is central to many contemporary discussions of belonging and assimilation of migrant-origin youth. Studies typically focus on a single minority identity. Identity theory implies, however, that individuals may hold multiple ethnic identities, or none, and these may find expression to a greater or less extent depending on context. Using a nationally representative, longitudinal study of Dutch teenagers, we investigate the role of classroom ethnic composition in shaping multiple ethnic identity expression. Framing identity choices as a relational process, we show that the number of ethnic identities that children with a migrant-origin background choose is greater for those students who are exposed to a more ethnically diverse context, while less diverse classrooms foster ethnic identification with no or fewer minority groups. Classification of migrant-origin students with a single (minority) ethnicity may thus be an oversimplification of ethnic identity, even for those from a single country of origin.},\n\
+      \   author = {Gert Jan Veerman and Lucinda Platt},\n\
+      \   doi = {10.1080/01419870.2021.1887503},\n\
+      \   issn = {14664356},\n\
+      \   issue = {16},\n\
+      \   journal = {Ethnic and Racial Studies},\n\
+      \   keywords = {Ethnic identity,adolescents,classroom composition,ethnic diversity,migrant-origin background,multiple identity},\n\
+      \   pages = {106-125},\n\
+      \   publisher = {Routledge},\n\
+      \   title = {School composition and multiple ethnic identities of migrant-origin adolescents in the Netherlands},\n\
+      \   volume = {44},\n\
+      \   year = {2021}\n\
+      \}\n\
+      \@incollection{Schielke,\n\
+      \  author    = {Samuli Schielke},\n\
+      \  editor    = {Carla Freeman and Rachel Heiman and Mark Liechty},\n\
+      \  title     = {Living in the Future Tense: Aspiring for world and class in provincial Egypt},\n\
+      \  booktitle = {The Global Middle Classes: Theorizing through Ethnography},\n\
+      \  pages     = {31-56},\n\
+      \  publisher = {School for Advanced Research Press},\n\
+      \  year      = {2012}\n\
+      \}"
 
 failsOnInvalidBibtexType = testCase "Refuses to parse an entry with an invalid bibtex type" $ assertBool "" condition
   where
@@ -140,7 +165,7 @@ entry1 = Entry
           , editor = Nothing
           , howpublished = Nothing
           , institution = Nothing
-          , keywords = Nothing
+          , keywords = Just "Ethnic identity,adolescents,classroom composition,ethnic diversity,migrant-origin background,multiple identity"
           , month = Nothing
           , note = Nothing
           , number = Nothing
@@ -152,29 +177,29 @@ entry1 = Entry
 
 entry2 :: Entry
 entry2 = Entry
-          { bibtexType = Techreport
-          , key = "Verkuyten2006"
-          , abstract = Just "The present research was conducted in the Netherlands and used an experimental design to examine the endorsement of minority rights among Turkish and Kurdish participants in two framed, national contexts: the Netherlands and Turkey. In the Dutch context, each group is a minority, whereas in the Turkish context the Kurds are an oppressed national minority and the Turks are the national majority. The results showed that the Turks were less in favor of minority rights in the Turkish context than in the Dutch context, whereas the Kurds were more in favor of minority rights in the Turkish than in the Dutch context. In addition, the endorsement of minority rights was related to beliefs about majority rule, state unity, and ingroup identification, as well as to cultural diversity and perceived pervasive discrimination. The associations with the former three measures differed between the two groups and the two national contexts, whereas the latter two measures had main effects on the endorsement of minority rights."
-          , author = ["Maykel Verkuyten",  "Ali Aslan Yildiz"]
-          , doi = Just "10.1080/01419870.2021.1887503"
-          , issn = Just "14664356"
-          , issue = Just "16"
-          , journal = Just "Ethnic and Racial Studies"
-          , pages = Just "106-125"
-          , publisher = Just "Routledge"
-          , title = Just "The Endorsement of Minority Rights: The Role of Group Position, National Context, and Ideological Beliefs"
-          , volume = Just "44"
-          , year = Just "2006"
+          { bibtexType = Incollection
+          , key = "Schielke"
+          , abstract = Nothing
+          , author = ["Samuli Schielke"]
+          , doi = Nothing
+          , issn = Nothing
+          , issue = Nothing
+          , journal = Nothing
+          , pages = Just "31-56"
+          , publisher = Just "School for Advanced Research Press"
+          , title = Just "Living in the Future Tense: Aspiring for world and class in provincial Egypt"
+          , volume = Nothing
+          , year = Just "2012"
           , address = Nothing
           , annote = Nothing
-          , booktitle = Nothing
+          , booktitle = Just "The Global Middle Classes: Theorizing through Ethnography"
           , chapter = Nothing
           , crossref = Nothing
           , edition = Nothing
-          , editor = Nothing
+          , editor = Just "Carla Freeman and Rachel Heiman and Mark Liechty"
           , howpublished = Nothing
           , institution = Nothing
-          , keywords = Just "identification,ideological beliefs,minority rights"
+          , keywords = Nothing
           , month = Nothing
           , note = Nothing
           , number = Nothing
