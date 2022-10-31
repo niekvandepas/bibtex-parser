@@ -13,10 +13,10 @@ headers :: [[Widget ()]]
 headers = [ map (str . show) [Author, Year, Title]]
 
 entryRow :: Entry -> [Widget ()]
-entryRow = (map str . columns)
+entryRow = map str . columns
   where
-    columns e = [(showAuthors (author e)), (maybeShow (year e)), (maybeShow (title e))]
+    columns e = [showAuthors (author e), maybeShow (year e), maybeShow (title e)]
     showAuthors = intercalate ", "
     maybeShow :: (Show a) => Maybe a -> String
     maybeShow Nothing = ""
-    maybeShow (Just x) = if length (show x) > 20 then (take 20 $ show x) ++ "…" else show x
+    maybeShow (Just x) = if length (show x) > 20 then take 20 (show x) ++ "…" else show x
