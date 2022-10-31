@@ -1,16 +1,16 @@
 {-# LANGUAGE RecordWildCards #-}
-module Entry (Entry(..), fromFields, empty) where
-import BibtexType (BibtexType)
+module Entry (Entry(..), fromFields, empty, validate, ValidationPredicate(..)) where
+import BibtexType (BibtexType (..))
 import Data.Map (Map, lookup)
 import Field (Field (..))
 import Prelude hiding (lookup)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, catMaybes, isJust)
+import Data.List ((\\), intercalate)
+import Debug.Trace (trace)
 
 type Key = String
 type Author = String
 
--- TODO it may be better to model `Entry` as follows:
--- data Entry = Article { name :: String, age :: Int } | Book { title :: String, publisher :: String} | ...etc.
 data Entry = Entry
   { bibtexType :: BibtexType,
     key :: Key,
@@ -115,3 +115,69 @@ empty k bt = Entry
   , volume = Nothing
   , year = Nothing
   }
+
+{--------------------------------------------------------------------
+  Validation
+--------------------------------------------------------------------}
+
+data ValidationPredicate  = Contains Field
+                          | ContainsOneOf [Field]
+                          deriving (Eq)
+
+instance Show ValidationPredicate where
+  show (Contains field) = "Should contain the following: " ++ show field ++ "."
+  show (ContainsOneOf fields) = "Should contain one of the following: " ++ (intercalate ", " $ map show fields) ++ "."
+
+validate :: Entry -> [ValidationPredicate]
+validate entry = validate' (bibtexType entry) entry
+  where
+    validate' :: BibtexType -> Entry -> [ValidationPredicate]
+    validate' bt e = catMaybes $ map (runPred e) (preds bt)
+
+runPred :: Entry -> ValidationPredicate -> Maybe ValidationPredicate
+runPred e (Contains field) = if fieldHasValue e field then Nothing else Just $ Contains field
+runPred e (ContainsOneOf fields) = if all (== True) (map (fieldHasValue e) fields) then Nothing else Just $ ContainsOneOf fields
+
+preds :: BibtexType -> [ValidationPredicate]
+preds Article = [Contains Author, Contains Title, Contains Journal, Contains Year]
+preds Book = [ContainsOneOf [Author, Editor], Contains Title, Contains Publisher, Contains Year]
+preds Booklet = [Contains Title]
+preds Inbook = [Contains Author, Contains Editor, Contains Title, Contains Publisher, Contains Year]
+preds Incollection = [Contains Author, Contains Title, Contains Booktitle, Contains Publisher, Contains Year]
+preds Inproceedings = [Contains Author, Contains Title, Contains Booktitle, Contains Year]
+preds Manual = [Contains Title]
+preds Mastersthesis = [Contains Author, Contains Title, Contains School, Contains Year]
+preds Misc = []
+preds Phdthesis = [Contains Author, Contains Title, Contains School, Contains Year]
+preds Proceedings = [Contains Title, Contains Year]
+preds Techreport = [Contains Author, Contains Title, Contains Institution, Contains Year]
+preds Unpublished = [Contains Author, Contains Title, Contains Note]
+
+fieldHasValue :: Entry -> Field -> Bool
+fieldHasValue e Abstract = isJust (abstract e)
+fieldHasValue e Address = isJust (address e)
+fieldHasValue e Annote = isJust (annote e)
+fieldHasValue e Author = (not . null) (author e)
+fieldHasValue e Booktitle = isJust (booktitle e)
+fieldHasValue e Chapter = isJust (chapter e)
+fieldHasValue e Crossref = isJust (crossref e)
+fieldHasValue e DOI = isJust (doi e)
+fieldHasValue e Edition = isJust (edition e)
+fieldHasValue e Editor = isJust (editor e)
+fieldHasValue e Howpublished = isJust (howpublished e)
+fieldHasValue e Institution = isJust (institution e)
+fieldHasValue e ISSN = isJust (issn e)
+fieldHasValue e Issue = isJust (issue e)
+fieldHasValue e Journal = isJust (journal e)
+fieldHasValue e Keywords = isJust (keywords e)
+fieldHasValue e Month = isJust (month e)
+fieldHasValue e Note = isJust (note e)
+fieldHasValue e Number = isJust (number e)
+fieldHasValue e Organization = isJust (organization e)
+fieldHasValue e Pages = isJust (pages e)
+fieldHasValue e Publisher = isJust (publisher e)
+fieldHasValue e School = isJust (school e)
+fieldHasValue e Series = isJust (series e)
+fieldHasValue e Title = isJust (title e)
+fieldHasValue e Volume = isJust (volume e)
+fieldHasValue e Year = isJust (year e)

@@ -9,6 +9,7 @@ import Data.Map (Map, fromList)
 import Entry (empty)
 import UI (ui)
 import Data.Either (isLeft)
+import Entry (ValidationPredicate(..))
 
 main :: IO ()
 main = defaultMain unitTests
@@ -28,6 +29,8 @@ tests =
     , performsSearch
     , performsSearchWithNoResult
     , failsOnInvalidField
+    , validatesValidEntry
+    , validatesInvalidEntry
     ]
 
 parsesSingleEntry :: TestTree
@@ -142,6 +145,16 @@ performsSearchWithNoResult = testCase "Performs a search query with no results" 
     expected = []
     actual = search "author = gork bork" [entry1, empty "" Article]
 
+validatesValidEntry = testCase "Validates an entry" $ assertEqual "" expected actual
+  where
+    expected = []
+    actual = validate entry1
+
+validatesInvalidEntry = testCase "Validates an invalid entry" $ assertEqual "" expected actual
+  where
+    expected = [Contains Author, Contains Title, Contains Journal]
+    actual = validate invalidEntry
+
 entry1 = Entry
           { bibtexType = Article
           , key = "Veerman2021"
@@ -208,3 +221,5 @@ entry2 = Entry
           , series = Nothing
           , reporttype = Nothing
           }
+
+invalidEntry = (empty "invalidEntry" Article) {year = Just "2012"}
