@@ -46,6 +46,10 @@ data Entry = Entry
   }
   deriving (Eq, Read, Show)
 
+{--------------------------------------------------------------------
+  Construction
+--------------------------------------------------------------------}
+
 fromFields :: Map Field.Field String -> [Author] -> BibtexType -> Key -> Entry
 fromFields fields author bibtexType key =
   let
