@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 module Persistence where
 import Entry (Entry)
 

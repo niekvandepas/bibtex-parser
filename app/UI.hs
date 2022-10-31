@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 module UI (ui) where
 
 import Data.Monoid ((<>))
@@ -11,4 +10,4 @@ import Data.List (intercalate)
 import UI.Internal (entriesTable)
 
 ui :: [Entry] -> Widget ()
-ui = (center . renderTable . entriesTable)
+ui = center . renderTable . entriesTable

@@ -2,14 +2,12 @@ import Test.Tasty (defaultMain, testGroup, TestTree)
 import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 import Parse.Bibtex (parseBibtex)
 import Parse.Search.Internal (parseSearch, search)
-import Entry
+import Entry ( validate, empty, Entry(..), ValidationPredicate(..), empty )
 import BibtexType (BibtexType(..))
 import Field (Field (..))
 import Data.Map (Map, fromList)
-import Entry (empty)
 import UI (ui)
 import Data.Either (isLeft)
-import Entry (ValidationPredicate(..))
 
 main :: IO ()
 main = defaultMain unitTests
@@ -51,7 +49,7 @@ parsesSingleEntry = testCase "Parses a single entry" $ assertEqual "" expected a
 \  year = {2021}\n\
 \}"
     actual = parseBibtex entry
-    expected = Right $  [ entry1 ]
+    expected = Right [ entry1 ]
 
 parsesMultipleEntries :: TestTree
 parsesMultipleEntries = testCase "Parses multiple entries" $ assertEqual "" expected actual

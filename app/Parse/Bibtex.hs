@@ -1,9 +1,7 @@
-{-# LANGUAGE RecordWildCards #-}
 module Parse.Bibtex (parseBibtex) where
 import Entry (Entry (..), fromFields)
 import Field (Field (Author))
 import BibtexType (BibtexType)
-import Control.Monad (liftM)
 import Data.Map (fromList, Map, lookup)
 import Data.Maybe (catMaybes)
 import Data.List.Split (splitOn)
@@ -16,13 +14,13 @@ import Data.Void (Void)
 type Parser = Parsec Void String
 
 parseBibtex :: String -> Either (ParseErrorBundle String Void) [Entry]
-parseBibtex input = parse parseBibtexFile "bibtex" input
+parseBibtex = parse parseBibtexFile "bibtex"
 
 parseBibtexFile :: Parser [Entry]
 parseBibtexFile = many parseEntry
 
 -- TODO on entry parse error, skip verbosely
-parseEntry :: Parser (Entry)
+parseEntry :: Parser Entry
 parseEntry = do
   many newline
   char '@'
@@ -37,7 +35,7 @@ parseFields :: Parser (String, Map Field String)
 parseFields = between (char '{') (char '}') $ do
   key <- parseKey <?> "valid key"
   char '\n'
-  fields <- sepBy (parseField) (string ",\n")
+  fields <- sepBy parseField (string ",\n")
   space
   return (key, fromList fields)
 
@@ -80,11 +78,11 @@ parseField = do
       ]
 
 parseKey :: Parser String
-parseKey = (manyTill charLiteral $ char ',') <?> "key"
+parseKey = manyTill charLiteral (char ',') <?> "key"
 
 parseBibtexType :: Parser BibtexType
 parseBibtexType =
-  (liftM read $ choice validBibtexTypes) <?> "valid type"
+  fmap read (choice validBibtexTypes) <?> "valid type"
   where
     validBibtexTypes =
       [ string "article"

@@ -4,7 +4,7 @@ import BibtexType (BibtexType (..))
 import Data.Map (Map, lookup)
 import Field (Field (..))
 import Prelude hiding (lookup)
-import Data.Maybe (fromMaybe, catMaybes, isJust)
+import Data.Maybe (fromMaybe, mapMaybe, catMaybes, isJust)
 import Data.List ((\\), intercalate)
 import Debug.Trace (trace)
 
@@ -126,17 +126,17 @@ data ValidationPredicate  = Contains Field
 
 instance Show ValidationPredicate where
   show (Contains field) = "Should contain the following: " ++ show field ++ "."
-  show (ContainsOneOf fields) = "Should contain one of the following: " ++ (intercalate ", " $ map show fields) ++ "."
+  show (ContainsOneOf fields) = "Should contain one of the following: " ++ intercalate ", " (map show fields) ++ "."
 
 validate :: Entry -> [ValidationPredicate]
 validate entry = validate' (bibtexType entry) entry
   where
     validate' :: BibtexType -> Entry -> [ValidationPredicate]
-    validate' bt e = catMaybes $ map (runPred e) (preds bt)
+    validate' bt e = mapMaybe (runPred e) (preds bt)
 
 runPred :: Entry -> ValidationPredicate -> Maybe ValidationPredicate
 runPred e (Contains field) = if fieldHasValue e field then Nothing else Just $ Contains field
-runPred e (ContainsOneOf fields) = if all (== True) (map (fieldHasValue e) fields) then Nothing else Just $ ContainsOneOf fields
+runPred e (ContainsOneOf fields) = if all ((== True) . fieldHasValue e) fields then Nothing else Just $ ContainsOneOf fields
 
 preds :: BibtexType -> [ValidationPredicate]
 preds Article = [Contains Author, Contains Title, Contains Journal, Contains Year]
