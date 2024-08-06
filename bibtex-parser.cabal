@@ -27,7 +27,7 @@ extra-source-files: CHANGELOG.md
 
 library
   build-depends:
-    base ^>=4.16.1.0
+    base ^>=4.17.1.0
     , megaparsec
     , containers
     , text
@@ -65,7 +65,7 @@ executable bibtex-parser
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
     build-depends:
-      base ^>=4.16.1.0
+      base ^>=4.17.1.0
       , megaparsec
       , containers
       , text
