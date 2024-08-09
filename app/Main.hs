@@ -8,12 +8,13 @@ import Data.Map.Lazy (Map)
 import Parse.Bibtex (parseBibtex)
 import UI (ui)
 import Brick (simpleMain)
+import Text.Megaparsec (errorBundlePretty)
 
 main :: IO ()
 main = do
   s <- readFile "testfile.bib"
   case (parseBibtex . preProcess) s of
-    Left p -> print p
+    Left p        -> putStrLn (errorBundlePretty p)
     Right entries -> simpleMain $ ui entries
 
 -- | Strips consecutive newlines
