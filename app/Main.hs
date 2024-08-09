@@ -1,14 +1,13 @@
 module Main where
-import System.Environment
-import Control.Monad (liftM)
-import Data.Char (toUpper, toLower)
-import Data.Map (fromList)
-import Data.List (isPrefixOf)
-import Data.Map.Lazy (Map)
-import Parse.Bibtex (parseBibtex)
-import UI (ui)
-import Brick (simpleMain)
-import Text.Megaparsec (errorBundlePretty)
+import           Brick           (simpleMain)
+import           Control.Monad   (liftM)
+import           Data.Char       (toLower, toUpper)
+import           Data.List       (isPrefixOf)
+import           Data.Map        (fromList)
+import           Data.Map.Lazy   (Map)
+import           Parse.Bibtex    (parseBibtex)
+import           Text.Megaparsec (errorBundlePretty)
+import           UI              (ui)
 
 main :: IO ()
 main = do
